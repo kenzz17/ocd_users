@@ -1,8 +1,11 @@
 # ocd_ysers
 <br>
-    Hosted at: http://52.187.32.163:8000/ 
+    Hosted at: http://52.187.32.163:8000/
+    <br> Admin Login http://52.187.32.163:8000/admin/
 <br>
 **Registration** <br>
+http://52.187.32.163:8000/api/register/
+<br>
 Send a post request in json format <br>
 ```
 {
@@ -44,6 +47,8 @@ Error:<br>
 
 ***
 **Login** <br>
+http://52.187.32.163:8000/api/login/
+<br>
 Send a post request in json format
 ```
 {
@@ -68,6 +73,8 @@ This will return data in format:
 ```
 ***
 **Logout**<br>
+http://52.187.32.163:8000/api/logout/
+<br>
 *This will logout only the given token of user*
 Send a post request with header
 ```
@@ -84,6 +91,8 @@ If no token is provided:-
 ```
 ***
 **LogoutAll**<br>
+http://52.187.32.163:8000/api/logoutall/
+<br>
 *This will logout all the tokens related to the user associated with given token*
 <br> All other detail are same as Logout<br>
 
