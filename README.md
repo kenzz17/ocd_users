@@ -73,6 +73,7 @@ This will return data in format:
 }
 ```
 ***
+# <a name="logout"></a> 
 **Logout**<br>
 http://52.187.32.163:8000/api/logout/
 <br>
@@ -95,7 +96,8 @@ If no token is provided:-
 http://52.187.32.163:8000/api/logoutall/
 <br>
 *This will logout all the tokens related to the user associated with given token*
-<br> All other detail are same as Logout<br>
+<br> All other detail are same as [Logout](#logout)
+<br>
 
 
 
