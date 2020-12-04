@@ -3,6 +3,7 @@
     Hosted at: http://52.187.32.163:8000/
     <br> Admin Login http://52.187.32.163:8000/admin/
 <br>
+
 **Registration** <br>
 http://52.187.32.163:8000/api/register/
 <br>
