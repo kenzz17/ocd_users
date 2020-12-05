@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from .models import File
 
 
 # User Serializer
@@ -28,3 +29,15 @@ class ChangePasswordSerializer(serializers.Serializer):
     """
     old_password=serializers.CharField(required=True)
     new_password=serializers.CharField(required=True)
+
+class FilesSerializer(serializers.Serializer):
+    # class Meta:
+    #     model=Files
+    #     fields=('owner',
+    #             'name',
+    #             'lang',
+    #             'body')
+    # model=File
+    name=serializers.CharField(required=True)
+    lang=serializers.CharField(required=True)
+    body=serializers.CharField()
