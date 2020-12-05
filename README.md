@@ -98,6 +98,16 @@ http://52.187.32.163:8000/api/logoutall/
 *This will logout all the tokens related to the user associated with given token*
 <br> All other detail are same as [Logout](#logout)
 <br>
+***
+
+**Change Passowrd** <br>
+http://52.187.32.163:8000/api/paschange/
+<br>
+send a post request with header containing authorization token and data (old_password, new_password) <br>
+Example (this example is for bash, find corresponding code for angular)<nr>
+```
+curl -X POST -H 'Authorization: Token 37746eaf3d28908b1997d32788f67e70677c57bf07eb063cd9a8c64878261b98' -d "old_password=test@12345&new_password=new@12345" http://127.0.0.1:8000/api/paschange/  
+```
 
 
 

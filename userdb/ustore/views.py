@@ -1,13 +1,17 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+
 from knox.models import AuthToken
-from .serializers import UserSerializer, RegisterSerializer
+from .serializers import UserSerializer, RegisterSerializer, ChangePasswordSerializer
 
 from django.contrib.auth import login
+from django.contrib.auth.models import User
 
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
+from rest_framework.permissions import IsAuthenticated
+
 
 
 # Register API
@@ -35,4 +39,34 @@ class LoginAPI (KnoxLoginView):
         return super(LoginAPI,self).post(request,format=None)
 
 
+class ChangePasswordView (generics.UpdateAPIView):
+    serializer_class=ChangePasswordSerializer
+    model=User
+    permission_classes=(IsAuthenticated,)
+
+    def get_object(self, queryset=None):
+        obj=self.request.user
+        print (obj)
+        return obj
+
+    def post(self, request, *args, **kwargs):
+        self.object=self.get_object()
+        serializer=self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            #check old password
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response({"old_password":["Wrong password"]}, status=status.HTTP_400_BAD_REQUEST)
+
+            #set new password
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            response={
+                'status': 'success',
+                'code':status.HTTP_200_OK,
+                'message':'Password Updated Succesfully',
+                'data':[]
+            }
+            return Response(response)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 # Create your views here.
