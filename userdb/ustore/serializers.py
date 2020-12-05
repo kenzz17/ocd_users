@@ -43,5 +43,5 @@ class FilesSerializer(serializers.Serializer):
     body=serializers.CharField(allow_blank=True)
 
 class FileGetterSerializer(serializers.Serializer):
-    listall=serializers.BooleanField(required=True)
+    all=serializers.BooleanField(required=True)
     name=serializers.CharField(required=True)

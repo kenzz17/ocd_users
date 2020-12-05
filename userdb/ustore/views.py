@@ -104,7 +104,14 @@ class FilesAccessView(generics.GenericAPIView):
             curr.execute(query,[username,filename])
             tlist=curr.fetchall()
             if len(tlist)!=0:
-                return Response({"error":"filename already exists"}, status=status.HTTP_400_BAD_REQUEST)
+                query='''
+                update ustore_file
+                set lang=?, body=?
+                where owner=? and name=?'''
+                curr.execute(query,[language,fullcode,username,filename])
+                message = filename + " updated succesfully"
+                return Response({"status":"success", "message":message},status=status.HTTP_200_OK)
+                # return Response({"error":"filename already exists"}, status=status.HTTP_400_BAD_REQUEST)
             query='''select name from ustore_file
                 where owner=?;
                 '''
@@ -119,7 +126,7 @@ class FilesAccessView(generics.GenericAPIView):
 
             message=filename+" uploaded succesfully"
 
-            return Response({"status":"success",'code':status.HTTP_200_OK, "message":message},)
+            return Response({"status":"success", "message":message},status=status.HTTP_200_OK)
 
         return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -131,7 +138,7 @@ class FilesAccessView(generics.GenericAPIView):
         if data_serializer.is_valid():
             conn = sqlite3.connect('db.sqlite3')
             curr = conn.cursor()
-            listall=data_serializer.data.get("listall")
+            listall=data_serializer.data.get("all")
             if listall==True:
                 query='select name from ustore_file where owner=?'
                 curr.execute(query, [username])
@@ -152,5 +159,34 @@ class FilesAccessView(generics.GenericAPIView):
                 # message=filename+" does not exist"
                 return Response({"error":"file does not exist"}, status=status.HTTP_400_BAD_REQUEST)
             return Response({"lang":tlist[0][0], "body":tlist[0][1]})
+
+        return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self,request,*args,**kwargs):
+        self.object = self.get_object()
+        user_serializer = UserSerializer(self.object)
+        username = user_serializer.data.get("username")
+        data_serializer = FileGetterSerializer(data=request.data)
+        if data_serializer.is_valid():
+            conn = sqlite3.connect('db.sqlite3')
+            curr = conn.cursor()
+            all=data_serializer.data.get("all")
+            if all==True:
+                query='''delete from ustore_file
+                where owner=?;
+                '''
+                curr.execute(query,[username])
+                conn.commit();
+                return Response({'status':'successfull', 'message':"all files of given user is deleted"}, status=status.HTTP_200_OK)
+
+            filename = data_serializer.data.get("name")
+            query = '''delete from ustore_file
+                            where
+                                owner=? and name=?;
+                            '''
+
+            curr.execute(query, [username, filename])
+            conn.commit()
+            return Response({'status': 'successfull', 'message': "file deleted"}, status=status.HTTP_200_OK)
 
         return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -11,5 +11,5 @@ urlpatterns = [
     path('api/logout/', knox_views.LogoutView.as_view(), name='logout'),
     path('api/logoutall/', knox_views.LogoutAllView.as_view(), name='logoutall'),
     path('api/paschange/',ChangePasswordView.as_view(), name='change-password'),
-    path('api/upload/', FilesAccessView.as_view(), name='file-access')
+    path('api/files/', FilesAccessView.as_view(), name='file-access')
 ]

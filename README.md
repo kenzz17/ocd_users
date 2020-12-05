@@ -106,7 +106,7 @@ http://52.187.32.163:8000/api/paschange/
 send a post request with header containing authorization token and data (old_password, new_password) <br>
 Example (this example is for bash, find corresponding code for angular)<nr>
 ```
-curl -X POST -H 'Authorization: Token 37746eaf3d28908b1997d32788f67e70677c57bf07eb063cd9a8c64878261b98' -d "old_password=test@12345&new_password=new@12345" http://127.0.0.1:8000/api/paschange/  
+curl -X POST -H 'Authorization: Token 37746eaf3d28908b1997d32788f67e70677c57bf07eb063cd9a8c64878261b98' -d "old_password=test@12345&new_password=new@12345" http://52.187.32.163:8000/api/paschange/  
 ```
 Return data :
 ```
@@ -123,6 +123,66 @@ If old password is worng
 ```
 {"old_password":["Wrong password"]}
 ```
-
-
-
+***
+**Save a New File**<br>
+http://52.187.32.163:8000/api/files/ <br>
+Send a post request, it should also contain Authentication Token as a Header:-
+```
+{
+    name=""
+    lang=""
+    body=""
+}
+```
+Example (in bash):-
+```
+curl -X POST -H 'Authorization: Token 3cdc5be20ba73d4dfdf9849b89f606e1b3fe5656a3726929b2adc7aee495f9eb' -d "name=qw3.cpp&lang=cpp&body=gsgbsgbsg" http://52.187.32.163:8000/api/upload/
+```
+Output (if file name is new):-
+```
+{"status":"success","message":"qw7.cpp uploaded succesfully"}
+```
+*File Name already exists*
+```
+{"status":"success","message":"qw4.cpp updated succesfully"}
+```
+Errors:- <br>
+*Max Number of File Reached*
+```
+{"error":"Max File Limit exceeded"}
+```
+***
+**Get Uploaded Files**<br>
+http://52.187.32.163:8000/api/files/
+<br>
+send a GET Request at above link <br>
+Input Format:-
+```
+all:true/false
+name:<filename>
+```
+Example:-
+```
+curl -X GET -H 'Authorization: Token 3cdc5be20ba73d4dfdf9849b89f606e1b3fe5656a3726929b2adc7aee495f9eb' -d "all=false&name=qw.cpp" http://52.187.32.163:8000/api/files/
+```
+If all is true it will return list of all files. Otherwise it will return content of give file.
+<br>
+if all is false and give filename does not exist then error:-
+```
+{"error":"file does not exist"}
+```
+***
+**Delete a File**<br>
+http://52.187.32.163:8000/api/files/
+<br>Send a delete request at above address<br>
+Input Format :-
+```
+all:true/false
+name:<filename>
+```
+Example:-
+```
+curl -X DELETE -H 'Authorization: Token 3cdc5be20ba73d4dfdf9849b89f606e1b3fe5656a3726929b2adc7aee495f9eb' -d "all=true&name=qw.cpp" http://52.187.32.163:8000/api/files/
+```
+If all is true then all the files of given user will be deleted<br> 
+If file name does not exist then it will not show any error.<br>
