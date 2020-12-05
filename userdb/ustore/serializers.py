@@ -40,4 +40,8 @@ class FilesSerializer(serializers.Serializer):
     # model=File
     name=serializers.CharField(required=True)
     lang=serializers.CharField(required=True)
-    body=serializers.CharField()
+    body=serializers.CharField(allow_blank=True)
+
+class FileGetterSerializer(serializers.Serializer):
+    listall=serializers.BooleanField(required=True)
+    name=serializers.CharField(required=True)
