@@ -43,7 +43,7 @@ class FilesSerializer(serializers.Serializer):
     body=serializers.CharField(allow_blank=True)
 
 class FileGetterSerializer(serializers.Serializer):
-    all=serializers.BooleanField(required=True)
+    all=serializers.CharField(required=True)
     name=serializers.CharField(required=True)
 
 class ProjectSerializer(serializers.Serializer):
@@ -54,6 +54,6 @@ class ProjectSerializer(serializers.Serializer):
     body=serializers.CharField(allow_blank=True)
 
 class ProjectFileGetterSerializer(serializers.Serializer):
-    all=serializers.BooleanField(required=True)
+    all=serializers.CharField(required=True)
     projectname=serializers.CharField(required=True)
     filename=serializers.CharField(required=True)

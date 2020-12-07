@@ -132,8 +132,7 @@ class FilesAccessView(generics.GenericAPIView):
             curr.close()
             conn.close()
             return Response({"status":"success", "message":message},status=status.HTTP_200_OK)
-        curr.close()
-        conn.close()
+
         return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self,request,*args, **kwargs):
@@ -145,7 +144,7 @@ class FilesAccessView(generics.GenericAPIView):
             conn = sqlite3.connect('db.sqlite3')
             curr = conn.cursor()
             listall=data_serializer.data.get("all")
-            if listall==True:
+            if listall=='True':
                 query='select name from ustore_file where owner=?'
                 curr.execute(query, [username])
                 nameList=curr.fetchall()
@@ -171,8 +170,7 @@ class FilesAccessView(generics.GenericAPIView):
             curr.close()
             conn.close()
             return Response({"lang":tlist[0][0], "body":tlist[0][1]})
-        curr.close()
-        conn.close()
+
         return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self,request,*args,**kwargs):
@@ -184,7 +182,7 @@ class FilesAccessView(generics.GenericAPIView):
             conn = sqlite3.connect('db.sqlite3')
             curr = conn.cursor()
             all=data_serializer.data.get("all")
-            if all==True:
+            if all=='True':
                 query='''delete from ustore_file
                 where owner=?;
                 '''
@@ -204,8 +202,7 @@ class FilesAccessView(generics.GenericAPIView):
             curr.close()
             conn.close()
             return Response({'status': 'successfull', 'message': "file deleted"}, status=status.HTTP_200_OK)
-        curr.close()
-        conn.close()
+
 
         return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -286,8 +283,7 @@ class ProjectAcessView(generics.GenericAPIView):
             curr.close()
             conn.close()
             return Response({'status':'fail','message':'max number of files in project reached'}, status=status.HTTP_400_BAD_REQUEST)
-        curr.close()
-        conn.close()
+
         return Response(data_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
     def get (self, request, *args, **kwargs):
@@ -303,7 +299,7 @@ class ProjectAcessView(generics.GenericAPIView):
             projectlist=data_serializer.data.get('all')
             projectname=data_serializer.data.get('name')
 
-            if projectlist==True:
+            if projectlist=='True':
                 query=''' select DISTINCT projectname from ustore_project 
                 where owner=? ;
                 '''
@@ -339,8 +335,7 @@ class ProjectAcessView(generics.GenericAPIView):
             conn.close()
             return Response({'status':'success', 'data':tlist}, status=status.HTTP_200_OK)
 
-        curr.close()
-        conn.close()
+
         return Response(data_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
     def delete (self, request, *args, **kwargs):
@@ -356,7 +351,7 @@ class ProjectAcessView(generics.GenericAPIView):
             projectname = data_serializer.data.get('projectname')
             filename=data_serializer.data.get('filename')
 
-            if allfiles==True:
+            if allfiles=='True':
                 query='''delete from ustore_project 
                 where owner=? and projectname=? ;
                 '''
