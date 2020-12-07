@@ -135,43 +135,6 @@ class FilesAccessView(generics.GenericAPIView):
 
         return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self,request,*args, **kwargs):
-        self.object = self.get_object()
-        user_serializer = UserSerializer(self.object)
-        username = user_serializer.data.get("username")
-        data_serializer = FileGetterSerializer(data=request.data)
-        if data_serializer.is_valid():
-            conn = sqlite3.connect('db.sqlite3')
-            curr = conn.cursor()
-            listall=data_serializer.data.get("all")
-            if listall=='True':
-                query='select name from ustore_file where owner=?'
-                curr.execute(query, [username])
-                nameList=curr.fetchall()
-                for i in range(0,len(nameList)):
-                    nameList[i]=nameList[i][0]
-                curr.close()
-                conn.close()
-                return Response({"names":nameList},status=status.HTTP_200_OK)
-            filename=data_serializer.data.get("name")
-
-            query='''
-                select lang, body from ustore_file
-                where owner=? and name=?;
-                '''
-
-            curr.execute(query,[username,filename])
-            tlist=curr.fetchall()
-            if len(tlist)==0:
-                # message=filename+" does not exist"
-                curr.close()
-                conn.close()
-                return Response({"error":"file does not exist"}, status=status.HTTP_400_BAD_REQUEST)
-            curr.close()
-            conn.close()
-            return Response({"lang":tlist[0][0], "body":tlist[0][1]})
-
-        return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self,request,*args,**kwargs):
         self.object = self.get_object()
@@ -286,7 +249,49 @@ class ProjectAcessView(generics.GenericAPIView):
 
         return Response(data_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-    def get (self, request, *args, **kwargs):
+
+
+    def delete (self, request, *args, **kwargs):
+        self.object = self.get_object()
+        user_serializer = UserSerializer(self.object)
+        username = user_serializer.data.get("username")
+        # postData=JSONParser().parse(request)
+        data_serializer = ProjectFileGetterSerializer(data=request.data)
+        if data_serializer.is_valid():
+            conn = sqlite3.connect('db.sqlite3')
+            curr = conn.cursor()
+            allfiles = data_serializer.data.get('all')
+            projectname = data_serializer.data.get('projectname')
+            filename=data_serializer.data.get('filename')
+
+            if allfiles=='True':
+                query='''delete from ustore_project 
+                where owner=? and projectname=? ;
+                '''
+                curr.execute(query,[username,projectname])
+                conn.commit()
+                curr.close()
+                conn.close()
+                message=projectname + ' deleted successfully'
+                return Response({'status':'success', 'message':message}, status=status.HTTP_200_OK)
+
+            query='''delete from ustore_project 
+            where owner=? and projectname=? and name=? ;'''
+
+            curr.execute(query,[username,projectname,filename])
+            conn.commit()
+            curr.close()
+            conn.close()
+            return Response({'status':'success', 'message':'file deleted successfully'}, status=status.HTTP_200_OK)
+
+        return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ProjectgetView(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+    def post (self, request, *args, **kwargs):
         self.object = self.get_object()
         user_serializer = UserSerializer(self.object)
         username = user_serializer.data.get("username")
@@ -338,37 +343,46 @@ class ProjectAcessView(generics.GenericAPIView):
 
         return Response(data_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-    def delete (self, request, *args, **kwargs):
+class FilegetView(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self, queryset=None):
+        obj = self.request.user
+        return obj
+    def post(self,request,*args, **kwargs):
         self.object = self.get_object()
         user_serializer = UserSerializer(self.object)
         username = user_serializer.data.get("username")
-        # postData=JSONParser().parse(request)
-        data_serializer = ProjectFileGetterSerializer(data=request.data)
+        data_serializer = FileGetterSerializer(data=request.data)
         if data_serializer.is_valid():
             conn = sqlite3.connect('db.sqlite3')
             curr = conn.cursor()
-            allfiles = data_serializer.data.get('all')
-            projectname = data_serializer.data.get('projectname')
-            filename=data_serializer.data.get('filename')
-
-            if allfiles=='True':
-                query='''delete from ustore_project 
-                where owner=? and projectname=? ;
-                '''
-                curr.execute(query,[username,projectname])
-                conn.commit()
+            listall=data_serializer.data.get("all")
+            if listall=='True':
+                query='select name from ustore_file where owner=?'
+                curr.execute(query, [username])
+                nameList=curr.fetchall()
+                for i in range(0,len(nameList)):
+                    nameList[i]=nameList[i][0]
                 curr.close()
                 conn.close()
-                message=projectname + ' deleted successfully'
-                return Response({'status':'success', 'message':message}, status=status.HTTP_200_OK)
+                return Response({"names":nameList},status=status.HTTP_200_OK)
+            filename=data_serializer.data.get("name")
 
-            query='''delete from ustore_project 
-            where owner=? and projectname=? and name=? ;'''
+            query='''
+                select lang, body from ustore_file
+                where owner=? and name=?;
+                '''
 
-            curr.execute(query,[username,projectname,filename])
-            conn.commit()
+            curr.execute(query,[username,filename])
+            tlist=curr.fetchall()
+            if len(tlist)==0:
+                # message=filename+" does not exist"
+                curr.close()
+                conn.close()
+                return Response({"error":"file does not exist"}, status=status.HTTP_400_BAD_REQUEST)
             curr.close()
             conn.close()
-            return Response({'status':'success', 'message':'file deleted successfully'}, status=status.HTTP_200_OK)
+            return Response({"lang":tlist[0][0], "body":tlist[0][1]})
 
         return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -153,7 +153,7 @@ Errors:- <br>
 ```
 ***
 **Get Uploaded Files**<br>
-http://52.187.32.163:8000/api/files/
+http://52.187.32.163:8000/api/fileget/
 <br>
 send a GET Request at above link <br>
 Input Format:-
@@ -215,7 +215,7 @@ Return:-
 {'status':'fail','message':'max number of files in project reached'}
 ```
 **Get uploaded projects**
-<br> http://52.187.32.163:8000/api/projects/
+<br> http://52.187.32.163:8000/api/projectget/
 <br> Send a get request
 <br> format 
 ```
