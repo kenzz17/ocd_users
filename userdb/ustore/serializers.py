@@ -45,3 +45,15 @@ class FilesSerializer(serializers.Serializer):
 class FileGetterSerializer(serializers.Serializer):
     all=serializers.BooleanField(required=True)
     name=serializers.CharField(required=True)
+
+class ProjectSerializer(serializers.Serializer):
+    name=serializers.CharField(required=True)
+    projectname=serializers.CharField(required=True)
+    relpath=serializers.CharField(allow_blank=True,required=False)
+    lang=serializers.CharField(required=True)
+    body=serializers.CharField(allow_blank=True)
+
+class ProjectFileGetterSerializer(serializers.Serializer):
+    all=serializers.BooleanField(required=True)
+    projectname=serializers.CharField(required=True)
+    filename=serializers.CharField(required=True)
