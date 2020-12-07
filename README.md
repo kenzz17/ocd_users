@@ -186,3 +186,69 @@ curl -X DELETE -H 'Authorization: Token 3cdc5be20ba73d4dfdf9849b89f606e1b3fe5656
 ```
 If all is true then all the files of given user will be deleted<br> 
 If file name does not exist then it will not show any error.<br>
+
+***
+**Project Post**
+<br> An empty project can't be posted 
+<br> http://52.187.32.163:8000/api/projects/
+<br> send post request 
+<br> Format 
+```
+{
+    name=""
+    projectname=""
+    relpath=""
+    lang=""
+    body=""
+}
+```
+For updating a file, use same link and same format
+<br>
+Return:-
+```
+//one of these will be returned if data sent is in correct format
+{'status':'success', 'message':'file added to the new project'}
+{'status':'success','message':'file is added in project'}
+{'status':'success','message':'file is updated'}
+{'status':'fail',"message":"Max Number of Projects Reached"}
+{'status':'success','message':'file is added in project'}
+{'status':'fail','message':'max number of files in project reached'}
+```
+**Get uploaded projects**
+<br> http://52.187.32.163:8000/api/projects/
+<br> Send a get request
+<br> format 
+```
+{
+    all=""   //boolean vaue
+    projectname=""
+}
+```
+If all is true:-
+```
+{"status":"success","projectlist":["abc","abc1","abc3","abc4","abc2"]}
+// if project not exist:-
+{'status': 'fail', 'data': 'project does not exist'}
+```
+If all is false:-
+```
+{"status":"success","data":[{"name":"qw17","body":"newbody","lang":"cpp","path":""},{"name":"qw18","body":"newbody","lang":"cpp","path":""},{"name":"qw19","body":"newbody","lang":"cpp","path":"jhagj/jhq"}]}
+//if project not exits:-
+{'status':'fail', 'data':'project does not exist'}
+```
+
+**Delete a project or file**
+<br> http://52.187.32.163:8000/api/projects/
+<br> Send a delete request
+<br> format 
+```
+{
+    all="" //boolean
+    projectname=""
+    filename=""
+}
+```
+If all is true, filename does not have any significance and all the files og given project will be deleted<br>
+otherwise the given file of given project will be deleted.
+<br>
+*No error will be shown in this case if project or file name do not exist*<br>

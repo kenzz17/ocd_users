@@ -309,6 +309,10 @@ class ProjectAcessView(generics.GenericAPIView):
                 '''
                 curr.execute(query,[username])
                 tlist=curr.fetchall()
+                if len(tlist) == 0:
+                    curr.close()
+                    conn.close()
+                    return Response({'status': 'fail', 'data': 'project does not exist'},status=status.HTTP_400_BAD_REQUEST)
                 for i in range(0,len(tlist)):
                     tlist[i]=tlist[i][0]
                 curr.close()
@@ -367,8 +371,9 @@ class ProjectAcessView(generics.GenericAPIView):
             where owner=? and projectname=? and name=? ;'''
 
             curr.execute(query,[username,projectname,filename])
+            conn.commit()
             curr.close()
             conn.close()
-            return Response({'status':'success', message:'file deleted successfully'}, status=status.HTTP_200_OK)
+            return Response({'status':'success', 'message':'file deleted successfully'}, status=status.HTTP_200_OK)
 
         return Response(data_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
