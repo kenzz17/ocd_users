@@ -91,7 +91,7 @@ class FilesAccessView(generics.GenericAPIView):
         data_serializer=FilesSerializer(data=request.data)
 
         if data_serializer.is_valid():
-            data_serializer.save()
+            # data_serializer.save()
             conn = sqlite3.connect('db.sqlite3')
             curr = conn.cursor()
             id=data_serializer.data.get("id")
