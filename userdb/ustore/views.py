@@ -110,6 +110,7 @@ class FilesAccessView(generics.GenericAPIView):
                 set lang=?, body=?
                 where owner=? and name=?'''
                 curr.execute(query,[language,fullcode,username,filename])
+                conn.commit()
                 message = filename + " updated succesfully"
                 curr.close()
                 conn.close()
