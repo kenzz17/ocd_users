@@ -120,7 +120,7 @@ class FilesAccessView(generics.GenericAPIView):
                 '''
             curr.execute(query,[username])
             tlist=curr.fetchall()
-            if len(tlist)>10:
+            if len(tlist)>=10:  #max number of files set to 10
                 curr.close()
                 conn.close()
                 return Response({"error":"Max File Limit exceeded"}, status=status.HTTP_400_BAD_REQUEST)
