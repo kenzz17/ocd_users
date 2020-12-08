@@ -1,7 +1,7 @@
 from .views import RegisterAPI
 from django.urls import path
 from knox import views as knox_views
-from .views import LoginAPI, ChangePasswordView, FilesAccessView, ProjectAcessView, FilegetView, ProjectgetView
+from .views import LoginAPI, ChangePasswordView, FilesAccessView, ProjectAcessView, FilegetView, ProjectgetView, FileDeleteView, ProjectDeleteView
 
 
 
@@ -13,6 +13,8 @@ urlpatterns = [
     path('api/paschange/',ChangePasswordView.as_view(), name='change-password'),
     path('api/files/', FilesAccessView.as_view(), name='file-access'),
     path('api/fileget/', FilegetView.as_view(), name='file-get'),
+    path('api/filedelete/', FileDeleteView.as_view(), name='file-delete'),
     path('api/projects/',ProjectAcessView.as_view(),name='project-access'),
-    path('api/projectget/',ProjectgetView.as_view(),name='project-get')
+    path('api/projectget/',ProjectgetView.as_view(),name='project-get'),
+    path('api/projectdelete/',ProjectDeleteView.as_view(),name='project-delete')
 ]

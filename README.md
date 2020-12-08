@@ -155,7 +155,7 @@ Errors:- <br>
 **Get Uploaded Files**<br>
 http://52.187.32.163:8000/api/fileget/
 <br>
-send a GET Request at above link <br>
+send a post Request at above link <br>
 Input Format:-
 ```
 all:true/false
@@ -173,8 +173,8 @@ if all is false and give filename does not exist then error:-
 ```
 ***
 **Delete a File**<br>
-http://52.187.32.163:8000/api/files/
-<br>Send a delete request at above address<br>
+http://52.187.32.163:8000/api/filedelete/
+<br>Send a post request at above address<br>
 Input Format :-
 ```
 all:true/false
@@ -216,7 +216,7 @@ Return:-
 ```
 **Get uploaded projects**
 <br> http://52.187.32.163:8000/api/projectget/
-<br> Send a get request
+<br> Send a post request
 <br> format 
 ```
 {
@@ -238,8 +238,8 @@ If all is false:-
 ```
 
 **Delete a project or file**
-<br> http://52.187.32.163:8000/api/projects/
-<br> Send a delete request
+<br> http://52.187.32.163:8000/api/projectdelete/
+<br> Send a post request
 <br> format 
 ```
 {
